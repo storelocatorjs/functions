@@ -1,8 +1,7 @@
-
 /**
  * Class Stores to filter stores with cloud functions
  */
-module.exports =  class Stores {
+module.exports = class Stores {
 	/**
 	 * Instanciate the constructor
 	 * @constructor
@@ -46,19 +45,19 @@ module.exports =  class Stores {
 			storesByDistance = this.getDistanceBetweenCoordinate({
 				lat1: this.lat,
 				lng1: this.lng,
-				lat2: currentStore.lat,
-				lng2: currentStore.lng,
+				lat2: currentStore.geometry.coordinates[1],
+				lng2: currentStore.geometry.coordinates[0],
 				unit: 'K'
 			})
-			currentStore.distance = storesByDistance
+			currentStore.properties.distance = storesByDistance
 			listStores.push(currentStore)
 		}
 
 		// Sort by distance to mapcenter
 		listStores.sort((arrayA, arrayB) => {
-			if (arrayA.distance < arrayB.distance) {
+			if (arrayA.properties.distance < arrayB.properties.distance) {
 				return -1
-			} else if (arrayA.distance > arrayB.distance) {
+			} else if (arrayA.properties.distance > arrayB.properties.distance) {
 				return 1
 			} else {
 				return 0
@@ -67,7 +66,7 @@ module.exports =  class Stores {
 
 		const storesFiltered = []
 		for (let i = 0, lengthStores = listStores.length; i < lengthStores; i++) {
-			if (listStores[i].distance > this.radius) {
+			if (listStores[i].properties.distance > this.radius) {
 				break
 			}
 			storesFiltered.push(listStores[i])
@@ -105,9 +104,7 @@ module.exports =  class Stores {
 		const theta = lng1 - lng2
 		const dist =
 			Math.sin(this.deg2rad(lat1)) * Math.sin(this.deg2rad(lat2)) +
-			Math.cos(this.deg2rad(lat1)) *
-				Math.cos(this.deg2rad(lat2)) *
-				Math.cos(this.deg2rad(theta))
+			Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * Math.cos(this.deg2rad(theta))
 		const miles = this.rad2deg(Math.acos(dist)) * 60 * 1.1515
 		unit = unit.toUpperCase()
 
@@ -138,4 +135,3 @@ module.exports =  class Stores {
 		return x * (180 / Math.PI)
 	}
 }
-
