@@ -1,12 +1,12 @@
-const storesDB = require('../db.json')
-const Stores = require('../stores.js')
-const express = require('express')
-const cors = require('cors')
+import storesDB from '../db.json'
+import Stores from '../stores.js'
+import express, { urlencoded, json } from 'express'
+import cors from 'cors'
 
 const app = express()
 app.use(cors())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(urlencoded({ extended: true }))
+app.use(json())
 
 // Set the default route
 app.post('/', (request, response) => {
@@ -40,4 +40,4 @@ app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`)
 })
 
-module.exports = app
+export default app
