@@ -1,4 +1,4 @@
-import storesDB from '../db.json'
+import db from '../db.json'
 import Stores from '../stores.js'
 import express, { urlencoded, json } from 'express'
 import cors from 'cors'
@@ -21,14 +21,14 @@ app.post('/', (request, response) => {
 
 	// Filter stores if parameters are valid
 	if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
-		const appStores = new Stores({
-			database: storesDB,
+		const stores = new Stores({
+			db,
 			lat,
 			lng,
 			radius,
 			limit
 		})
-		results = appStores.filter()
+		results = stores.init()
 	}
 
 	// Send status 200 with JSON results

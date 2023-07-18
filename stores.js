@@ -5,15 +5,15 @@ module.exports = class Stores {
 	/**
 	 * Instanciate the constructor
 	 * @constructor
-	 * @param {Object} database Database of stores (JSON)
+	 * @param {Object} db db of stores (JSON)
 	 * @param {String} lat Latitude of the request
 	 * @param {String} lng Longitude of the request
 	 * @param {Array} categories Selected categories of the request
 	 * @param {Integer} radius Radius of the request
 	 * @param {Integer} limit Limit of results of the request
 	 */
-	constructor({ database, lat, lng, radius = 50, limit = 0 }) {
-		this.database = database
+	constructor({ db, lat, lng, radius = 50, limit = 0 }) {
+		this.db = db
 		this.lat = lat
 		this.lng = lng
 		this.radius = parseInt(radius)
@@ -21,25 +21,17 @@ module.exports = class Stores {
 	}
 
 	/**
-	 * Filter stores according to request options
-	 * @return {Object} List of stores filtered (JSON)
-	 */
-	filter() {
-		return this.filterStoreByGeoPosition()
-	}
-
-	/**
 	 * Filter store by geoposition
 	 * @return {Object} Stores filtered by geoposition
 	 */
-	filterStoreByGeoPosition() {
+	init() {
 		const listStores = []
 		let currentStore
 		let storesByDistance
 
 		// Loop on all store and calculate distance between point
-		for (let i = 0, lengthStores = this.database.length; i < lengthStores; i++) {
-			currentStore = this.database[i]
+		for (let i = 0, lengthStores = this.db.length; i < lengthStores; i++) {
+			currentStore = this.db[i]
 
 			// Calculate the distance between store coordinate and request coordinate
 			storesByDistance = this.getDistanceBetweenCoordinate({
@@ -92,7 +84,7 @@ module.exports = class Stores {
 	//          where: 'M' is statute miles (default)
 	//                 'K' is kilometers
 	//                 'N' is nautical miles
-	// Worldwide cities and other features databases with latitude longitude
+	// Worldwide cities and other features dbs with latitude longitude
 	// are available at http://www.geodatasource.com
 	//
 	// For enquiries, please contact sales@geodatasource.com
