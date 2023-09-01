@@ -4,7 +4,18 @@ import express, { urlencoded, json } from 'express'
 import cors from 'cors'
 
 const app = express()
-app.use(cors())
+var whitelistDomain = ['storelocator.js.org', 'localhost']
+app.use(
+	cors({
+		origin: function (origin, callback) {
+			if (whitelistDomain.indexOf(origin) !== -1) {
+				callback(null, true)
+			} else {
+				callback(new Error('Storelocatorjs: Origin is not allowed by CORS'))
+			}
+		}
+	})
+)
 app.use(urlencoded({ extended: true }))
 app.use(json())
 
